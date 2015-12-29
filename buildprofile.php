@@ -5,8 +5,8 @@ function buildprofile($profilepic, $displayname, $userid) {
 	echo '<h1 id="displayname">' . $displayname . '</h1>
 		<a class="button" href="index.php">logout</a>
 		<a href="javascript:showbox();" class="button" id="closebox" onclick="showbox()">edit picture</a>
-		<form id="quipform">
-		quip:<input type="text" id="inputquip" name="quip" onkeyup="return limitlength(this, 139)">';
+		<form id="quipform" action="javascript:postquip('.$userid.');">
+		quip:<input type="text" id="inputquip" name="quip"  onkeypress="return numbersonly(event,\'quipform\')" onkeyup="return limitlength(this, 255)">';
 	echo '<a href="javascript:postquip(' . $userid . ');" class="button" id="submitquip" onclick="postquip(' . $userid . ')">post</a>
 		</form>
 	</div>';

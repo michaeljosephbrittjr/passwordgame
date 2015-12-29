@@ -1,5 +1,6 @@
 <html><head>
 <link rel="stylesheet" style="text/css" href="style.css">
+<script src="events.js"></script>
 <script src="dynamics.js"></script>
 <title>welcome to password game</title></head>
 <body onload="centerform()" onresize="centerform()">
@@ -9,19 +10,26 @@ $INC_DIR = $_SERVER["DOCUMENT_ROOT"]. "/passwordgame/";
 // REDO ALL OF THIS WITH SESSION DATA
 if (isset($_POST['profilepic'])) {$profilepic = $_POST['profilepic'];}
 if (isset($_POST['displayname'])) {$displayname = $_POST['displayname'];}
-if (isset($_POST['userid'])) {$userid = $_POST['userid'];}
+if (isset($_POST['userid'])) {
+	$userid = $_POST['userid'];
+	echo '<div id="useridhidden" style="display:none;">'.$userid.'</div>';
+}
 if (isset($_POST['whatever'])) {$pw = $_POST['whatever'];}
 
 include($INC_DIR. "connect.php");
 $db = connectdb('passgame');
-
-echo '<div id="mainform"><form action="index.php" id="formitself" method="post">';
+?>
+<div id="mainform">
+<form action="index.php" id="formitself" method="post">
+<?php
 if (!(isset($_POST['profilepic']))) {
 	include($INC_DIR. "updatepic.php"); 
 	include($INC_DIR. "displayname.php"); 
 	if (!(isset($_POST['displayname']))) { 
 	  	if (!(isset($_POST['whatever']))) {		
-		    echo '<div id="message">enter the password:</div><br><input type="text" id="inputfield" name="whatever" onkeypress="return numbersonly(event)" onkeyup="return limitlength(this, 15)">';	}
+		    echo '<div id="message">enter the password:</div>
+		          <br>
+		          <input type="text" id="inputfield" name="whatever" onkeypress="return numbersonly(event,\'formitself\')" onkeyup="return limitlength(this, 15)">';	}
 		else {		
 			include($INC_DIR. "getid.php");
 			$userid = getid($db,$pw); 
@@ -30,7 +38,7 @@ if (!(isset($_POST['profilepic']))) {
 			else {
 				$displayname = getdisplayname($db, $userid);
 				if (!($displayname)) {
-					echo '<br><div id="message">You\'re in!<br>please chose permanent display name:</div><input type="text" id="inputfield" name="displayname" onkeypress="return numbersonly(event)" onkeyup="return limitlength(this, 139)">';	}
+					echo '<br><div id="message">You\'re in!<br>please chose permanent display name:</div><input type="text" id="inputfield" name="displayname" onkeypress="return numbersonly(event,\'formitself\')" onkeyup="return limitlength(this, 139)">';	}
 				else {
 					if ($profilepic = updatepic("get", $db, $userid)) {
 						echo '<br><img src="' . $profilepic . '" id="profilepicture">';	
@@ -62,18 +70,25 @@ else {
 	echo '<input type="hidden" name="userid" value="' . $userid . '">';	
 	}	
 ?>
-<input class="button" type="submit" id="formsubmit"><?php 
+<input class="button" type="submit" id="formsubmit">
+</form>
+<?php 
 if (isset($_POST['profilepic'])) { 
 	echo '<a href="javascript:hidebox();" class="button" id="closebox" onclick="hidebox()">X</a>'; } 
-?></form>
-<?php 
 if (isset($_POST['whatever'])) {
 	echo '[<a href="index.php">logout</a>]';}
-?></div> 
+?>
+</div> 
 <?php 
 if (isset($_POST['profilepic'])) {
 	include($INC_DIR. "buildprofile.php"); 
-	buildprofile($profilepic, $displayname, $userid);}
+	buildprofile($profilepic, $displayname, $userid);
+	echo "
+	<script type='text/javascript'>
+    	document.getElementById('mainform').style.display = 'none';
+	</script>
+	";
+}
 ?>
 <span id="fiftyfiftyfeed"></span>
 </body>

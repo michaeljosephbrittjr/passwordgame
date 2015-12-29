@@ -15,7 +15,7 @@ function updatepic($action, $db, $userid) {
 	$createsql = "CREATE TABLE IF NOT EXISTS `passgame`.`profilepic` ( `id` INT NOT NULL , `url` VARCHAR(512) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;";
 	$createresult = mysqli_query($db, $createsql) or trigger_error("error: ". mysqli_error($db), E_USER_ERROR);	
 	$result = mysqli_query($db, $sql) or trigger_error("error: ". mysqli_error($db), E_USER_ERROR);
-	if (mysqli_num_rows($result) > 0) {
+	if (@mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
 		mysqli_free_result($result);
 		return $row['url'];
@@ -28,6 +28,6 @@ function updatepic($action, $db, $userid) {
 function displayupdatepic($displayname) {
 	echo '<input type="hidden" name="displayname" value="' . $displayname . '">';
 	echo '<br>Copy and paste a url for your profile picture:<br>';
-	echo '<input type="text" value="http://i2.cdn.turner.com/cnnnext/dam/assets/130831195426-24-iconic-einstein-horizontal-large-gallery.jpg" name="profilepic" id="inputfield" onkeypress="return numbersonly(event)" onkeyup="return limitlength(this, 139)">';
+	echo '<input type="text" value="http://i2.cdn.turner.com/cnnnext/dam/assets/130831195426-24-iconic-einstein-horizontal-large-gallery.jpg" name="profilepic" id="inputfield" onkeypress="return numbersonly(event,\'formitself\')" onkeyup="return limitlength(this, 139)">';
 }
 ?>

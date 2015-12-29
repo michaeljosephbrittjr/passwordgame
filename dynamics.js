@@ -23,12 +23,16 @@ function limitlength(obj, length) {
 		}
 	}
 
-function numbersonly(e) { 
+function numbersonly(e,element) { 
 	var unicode=e.charCode? e.charCode : e.keyCode;
+
 	if (unicode!=8&&unicode!=32) { //if not backspace AND not space
 		if (unicode<48||unicode>57) {//if not a number
 			if (unicode<97||unicode>122) {//if not a letter
 				if (unicode<65||unicode>90) { // if not uppercase 
+					if (unicode = 13) {
+						document.getElementById(element).submit();
+						}
 	 				return false;
 					}
 				}
